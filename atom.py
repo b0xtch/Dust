@@ -3,6 +3,8 @@ import pandas as pd
 from cv2 import imread
 from etl import lweather
 from sklearn.svm import SVC
+from sklearn.decomposition import PCA
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
@@ -28,10 +30,14 @@ class Atom:
         Split into train and test
         '''
         print('Spliting data into training and testing')
-        self.X_train, X_test, self.y_train, y_test = train_test_split(
-            self.weather.loc[:, 'Images'].values,
-            self.weather['Weather'].apply(self.get_mlb)
-        )
+        X = self.weather.loc[:, 'Date/Time'].values
+        y = self.weather['Weather'].apply(self.get_mlb)
+
+        self.X_train, X_test, self.y_train, y_test = train_test_split(X, y)
+
+        print(self.X_train)
+        #self.X_train = self.load_imgs(self.X_train)
+        #print(self.X_train)
         #print(self.X_train)
         #print(imread(str(self.X_train)))
         #print(self.weather.loc[:, 'Images'].values)
@@ -44,12 +50,12 @@ class Atom:
         '''
         '''
         print('Training model...')
+        #self.X_train, _ = self.load_imgs(self.X_train)
         self.model = make_pipeline(
-            StandardScaler(),
-            MLPClassifier(solver='lbfgs', alpha = 2,
-            random_state=5, activation = 'logistic')
+            PCA(50),
+            KNeighborsClassifier(n_neighbors=13)
         )
-        self.model.fit(imread(str(self.X_train)), self.y_train)
+        self.model.fit(self.X_train, self.y_train)
         score = self.model.score(X_test, y_test)
         print('SVM score:', score)
 
@@ -61,5 +67,9 @@ class Atom:
     def get_pixels(self, path):
         '''
         '''
-        print('AA& : ')
+
         return imread(path)
+
+    def load_imgs(self, X_path):
+        arr = np.array([np.array(imread(img)) for img in X_path])
+        return arr

@@ -1,4 +1,3 @@
-import sys
 import etl
 import glob, os
 import numpy as np
@@ -22,7 +21,6 @@ def tweather(weather, images):
     Predicate NA values from df with no NA values
     '''
     weather = weather[['Weather', 'Date/Time']]
-    weather = weather.dropna(axis=1, how='all')
     #The unique strings you'll find are probably not exactly the choices you want to make for categories.
     attrs = weather['Weather'].values
     temp = ''
@@ -48,6 +46,7 @@ def tweather(weather, images):
         str('%02d' % dt.day)   +
         str('%02d' % dt.hour)  + '0000' + '.jpg') #)
     weather = weather[pd.notnull(weather['Images'])]
+
     #weather[weather["Weather"] == "NA"] => check operation
 
     return weather
