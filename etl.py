@@ -37,16 +37,16 @@ def tweather(weather, images):
     weather['Weather'] = pd.Series(attrs)
     weather = weather.dropna(axis=0, how='any')
 
-    print('Merging weather with associated images...')
+    print('Merging weather with associated images paths...')
     weather['Images'] = pd.to_datetime(weather['Date/Time'], format='%Y-%m-%d %H:%M').apply(
     lambda dt:
-        imread(
+        # imread( # for efficiency only read the image when training
         images                 +
         '/katkam-'             +
         str(dt.year)           +
         str('%02d' % dt.month) +
         str('%02d' % dt.day)   +
-        str('%02d' % dt.hour)  + '0000' + '.jpg'))
+        str('%02d' % dt.hour)  + '0000' + '.jpg') #)
     weather = weather[pd.notnull(weather['Images'])]
     #weather[weather["Weather"] == "NA"] => check operation
 

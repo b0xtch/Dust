@@ -9,6 +9,7 @@ def main(images, weather):
     The main entry of dust
     '''
     weather = Atom(weather, images)
+    
 
 if __name__=='__main__':
 #     images = sys.argv[1]
