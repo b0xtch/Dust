@@ -1,5 +1,5 @@
 # Dust
-Dust is a python program that predicates weather conditions given a set of images as well as a set if weather.
+Dust is a python program that predicts weather conditions given either a set of images or set of weather data.
 
 ## Installation
 **Requirements(python modules):**
